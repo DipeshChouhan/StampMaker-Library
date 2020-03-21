@@ -1,0 +1,3 @@
+rootProject.name='StampGenerator'
+include ':app'
+include ':stampmaker-library'
