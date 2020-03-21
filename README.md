@@ -17,3 +17,4 @@ Add it in your root build.gradle at the end of repositories:
 	}
 
 Tag - see releases
+latests - v0.1-alpha
