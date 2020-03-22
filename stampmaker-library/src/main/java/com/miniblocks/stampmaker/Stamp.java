@@ -114,9 +114,9 @@ public class Stamp extends View implements View.OnClickListener {
     private void setUpAttributes(AttributeSet attrs){
         TypedArray array = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.Stamp, 0, 0);
         try{
-            strokeWidth = array.getInt(R.styleable.Stamp_strokeWidth, strokeWidth);
-            strokeFillColor = array.getColor(R.styleable.Stamp_strokeFillColor, strokeFillColor);
-            fill = array.getBoolean(R.styleable.Stamp_fill, fill);
+            strokeWidth = array.getInt(R.styleable.Stamp_stamp_strokeWidth, strokeWidth);
+            strokeFillColor = array.getColor(R.styleable.Stamp_stamp_strokeFillColor, strokeFillColor);
+            fill = array.getBoolean(R.styleable.Stamp_stamp_fill, fill);
         }finally {
             array.recycle();
         }
