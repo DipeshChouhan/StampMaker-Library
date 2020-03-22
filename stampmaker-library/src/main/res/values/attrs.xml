@@ -6,4 +6,13 @@
         <attr name="stamp_fill" format="boolean"/>
         <attr name="stamp_strokeColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="SwitchStamp">
+    <attr name="switch_strokeWidth" format="integer"/>
+    <attr name="switch_offFillColor" format="color"/>
+    <attr name="switch_onFillColor" format="color"/>
+    <attr name="switch_on" format="boolean"/>
+    <attr name="switch_strokeColor" format="color" />
+    <attr name="switch_cornerRadius" format="integer"/>
+    </declare-styleable>
 </resources>

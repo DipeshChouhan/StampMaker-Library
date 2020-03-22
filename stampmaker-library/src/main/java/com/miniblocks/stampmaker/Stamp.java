@@ -6,13 +6,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.icu.util.Measure;
 import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
-public class Stamp extends View implements View.OnClickListener {
+import com.miniblocks.stampmaker.utils.ConversionUtil;
+import com.miniblocks.stampmaker.utils.StampHelper;
+import com.miniblocks.stampmaker.utils.StampStateChangeListener;
+
+public class Stamp extends View implements View.OnClickListener, StampHelper {
     private static StampStateChangeListener stateChangeListener;
     private int strokeWidth = 8; // default width
     private int strokeFillColor = Color.rgb(30, 144, 255);
@@ -65,27 +68,12 @@ public class Stamp extends View implements View.OnClickListener {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int desiredWidth = ConversionUtil.convertDpToPixel(width, getContext())+getSuggestedMinimumWidth()+getPaddingLeft()+getPaddingRight();
         int desiredHeight = ConversionUtil.convertDpToPixel(height, getContext())+getSuggestedMinimumHeight()+getPaddingBottom()+getPaddingTop();
-        setMeasuredDimension(width = measureDimension(desiredWidth, widthMeasureSpec),
-                height = measureDimension(desiredHeight, heightMeasureSpec));
+        setMeasuredDimension(width = ConversionUtil.measureDimension(desiredWidth, widthMeasureSpec),
+                height = ConversionUtil.measureDimension(desiredHeight, heightMeasureSpec));
 
     }
 
 
-    private int measureDimension(int desiredSize, int measureSpec){
-        int result;
-        int specMode = MeasureSpec.getMode(measureSpec);
-        int specSize = MeasureSpec.getSize(measureSpec);
-        if(specMode == MeasureSpec.EXACTLY){
-            result = specSize;
-        }else{
-            result = desiredSize;
-            if(specMode == MeasureSpec.AT_MOST){
-                result = Math.min(result, specSize);
-            }
-
-        }
-        return result;
-    }
     private void init(){
         pathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         pathPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -162,23 +150,17 @@ public class Stamp extends View implements View.OnClickListener {
         return strokeWidth;
     }
     // in dp
-    public void setStampSize(int newWidth, int newHeight){
+    public void setSize(int newWidth, int newHeight){
         width = ConversionUtil.convertDpToPixel(newWidth, getContext());
         height = ConversionUtil.convertDpToPixel(newHeight, getContext());
         invalidate();
-    }
-    public int getStampWidth(){
-        return width;
-    }
-    public int getStampHeight(){
-        return height;
     }
 
     public boolean getState(){
         return fill;
     }
 
-    public void setOnStampStateChangeListener(StampStateChangeListener listener){
+    public void setOnStateChangeListener(StampStateChangeListener listener){
         stateChangeListener = listener;
     }
 
