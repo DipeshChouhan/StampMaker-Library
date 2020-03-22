@@ -4,5 +4,6 @@
         <attr name="stamp_strokeWidth" format="integer"/>
         <attr name="stamp_strokeFillColor" format="color"/>
         <attr name="stamp_fill" format="boolean"/>
+        <attr name="stamp_strokeColor" format="color"/>
     </declare-styleable>
 </resources>

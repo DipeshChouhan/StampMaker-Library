@@ -16,11 +16,13 @@ public class Stamp extends View implements View.OnClickListener {
     private static StampStateChangeListener stateChangeListener;
     private int strokeWidth = 8; // default width
     private int strokeFillColor = Color.rgb(30, 144, 255);
+    private int strokeColor = Color.GRAY;
     public static final boolean STATE_FILL = true;
     public static final boolean STATE_NOT_FILL = false;
     private Paint pathPaint;
     private Paint pathStrokePaint;
     private Path stampPath;
+
     private int width = 80; // in dp -default width and height
     private int height = 80; // in dp -default width and height
     private boolean fill = false;
@@ -91,7 +93,7 @@ public class Stamp extends View implements View.OnClickListener {
         pathPaint.setStrokeWidth(strokeWidth);
         pathStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         pathStrokePaint.setStyle(Paint.Style.STROKE);
-        pathStrokePaint.setColor(strokeFillColor);
+        pathStrokePaint.setColor(strokeColor);
         pathStrokePaint.setStrokeCap(Paint.Cap.ROUND);
         pathStrokePaint.setStrokeJoin(Paint.Join.ROUND);
         pathStrokePaint.setStrokeWidth(strokeWidth);
@@ -117,6 +119,7 @@ public class Stamp extends View implements View.OnClickListener {
             strokeWidth = array.getInt(R.styleable.Stamp_stamp_strokeWidth, strokeWidth);
             strokeFillColor = array.getColor(R.styleable.Stamp_stamp_strokeFillColor, strokeFillColor);
             fill = array.getBoolean(R.styleable.Stamp_stamp_fill, fill);
+            strokeColor = array.getColor(R.styleable.Stamp_stamp_strokeColor, strokeColor);
         }finally {
             array.recycle();
         }
@@ -132,6 +135,43 @@ public class Stamp extends View implements View.OnClickListener {
             stateChangeListener.onStateChange(fill);
         }
 
+    }
+
+    public void setStrokeColor(int color){
+        strokeColor = color;
+        invalidate();
+    }
+
+    public int getStrokeColor(){
+        return strokeColor;
+    }
+
+    public void setFillColor(int color){
+        strokeFillColor = color;
+        invalidate();
+    }
+    public int getFillColor(){
+        return strokeFillColor;
+    }
+
+    public void setStrokeWidth(int strWidth){
+        strokeWidth = strWidth;
+        invalidate();
+    }
+    public int getStrokeWidth(){
+        return strokeWidth;
+    }
+    // in dp
+    public void setStampSize(int newWidth, int newHeight){
+        width = ConversionUtil.convertDpToPixel(newWidth, getContext());
+        height = ConversionUtil.convertDpToPixel(newHeight, getContext());
+        invalidate();
+    }
+    public int getStampWidth(){
+        return width;
+    }
+    public int getStampHeight(){
+        return height;
     }
 
     public boolean getState(){
