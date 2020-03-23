@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -26,13 +28,14 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
     private Paint pathStrokePaint;
     private Path stampPath;
 
+
     private int width = 80; // in dp -default width and height
     private int height = 80; // in dp -default width and height
     private boolean fill = false;
 
     public Stamp(Context context) {
         super(context);
-
+        setSaveEnabled(true);
         setOnClickListener(this);
         init();
 
@@ -40,7 +43,7 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
 
     public Stamp(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
+        setSaveEnabled(true);
         setOnClickListener(this);
 //        stateChangeListener = (StampStateChangeListener)context;
         setUpAttributes(attrs);
@@ -169,14 +172,62 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
     public void onClick(View v) {
         fill = !fill;
         if(stateChangeListener != null){
-//            stateChangeListener = (StampStateChangeListener)mContext;
             stateChangeListener.onStateChange(fill);
         }
 
 
         invalidate();
 
+    }
 
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState =  super.onSaveInstanceState();
+        SavedState myState = new SavedState(superState);
+        myState.mFill = fill ? 1: 0;
+        return myState;
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState myState = (SavedState)state;
+        super.onRestoreInstanceState(state);
+        fill = myState.mFill == 1;
+
+        invalidate();
+    }
+
+    private static class SavedState extends BaseSavedState {
+        int mFill;
+
+        public SavedState(Parcel source) {
+            super(source);
+            mFill = source.readInt();
+
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(mFill);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
+                    @Override
+                    public SavedState createFromParcel(Parcel source) {
+                        return new SavedState(source);
+                    }
+
+                    @Override
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 }

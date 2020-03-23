@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -246,6 +248,67 @@ public class SwitchStamp extends View implements View.OnTouchListener, StampHelp
                 stateChangeListener.onStateChange(switchOn);
             }
         }
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable superState =  super.onSaveInstanceState();
+        SavedState myState = new SavedState(superState);
+        myState.mSwitchOn = switchOn ? 1 : 0;
+        myState.mDefaultColor = defaultColor;
+        myState.mDefaultValue = defaultValue > 0 ? 8 : 0;
+        System.out.println("on save");
+        return myState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        SavedState myState = (SavedState)state;
+        super.onRestoreInstanceState(myState.getSuperState());
+        switchOn = myState.mSwitchOn == 1;
+        defaultColor = myState.mDefaultColor;
+        defaultValue = myState.mDefaultValue;
+        System.out.println("restore");
+        invalidate();
+    }
+
+    private static class SavedState extends BaseSavedState {
+        int mSwitchOn;
+        int mDefaultColor;
+        int mDefaultValue;
+        public SavedState(Parcel source) {
+            super(source);
+            mSwitchOn = source.readInt();
+            mDefaultColor = source.readInt();
+            mDefaultValue = source.readInt();
+        }
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(mSwitchOn);
+            out.writeInt(mDefaultColor);
+            out.writeInt(mDefaultValue);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
+                    @Override
+                    public SavedState createFromParcel(Parcel source) {
+                        return new SavedState(source);
+                    }
+
+                    @Override
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+
 
     }
 }
