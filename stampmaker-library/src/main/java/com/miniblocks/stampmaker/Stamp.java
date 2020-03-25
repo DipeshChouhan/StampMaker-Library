@@ -55,7 +55,6 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
     protected void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
-        System.out.println(width+" "+height);
         createPath();
         canvas.drawPath(stampPath, pathStrokePaint);
         if(fill){
@@ -102,6 +101,7 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
         stampPath.lineTo(min, min);
         stampPath.lineTo(width-strokeWidth, height-strokeWidth);
         stampPath.lineTo(width-strokeWidth, 0);
+        stampPath.close();
 
     }
     private void setUpAttributes(AttributeSet attrs){
