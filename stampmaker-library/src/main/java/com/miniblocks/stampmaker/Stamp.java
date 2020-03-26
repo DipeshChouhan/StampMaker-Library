@@ -17,8 +17,8 @@ import com.miniblocks.stampmaker.utils.ConversionUtil;
 import com.miniblocks.stampmaker.utils.StampHelper;
 import com.miniblocks.stampmaker.utils.StampStateChangeListener;
 
-public class Stamp extends View implements View.OnClickListener, StampHelper {
-    private static StampStateChangeListener stateChangeListener;
+public class Stamp extends View implements StampHelper {
+
     private int strokeWidth = 8; // default width
     private int strokeFillColor = Color.rgb(30, 144, 255);
     private int strokeColor = Color.GRAY;
@@ -36,7 +36,6 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
     public Stamp(Context context) {
         super(context);
         setSaveEnabled(true);
-        setOnClickListener(this);
         init();
 
     }
@@ -44,7 +43,6 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
     public Stamp(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         setSaveEnabled(true);
-        setOnClickListener(this);
 //        stateChangeListener = (StampStateChangeListener)context;
         setUpAttributes(attrs);
 
@@ -122,11 +120,10 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
             fill = changeTo;
             invalidate();
         }
-        if(stateChangeListener != null){
-            stateChangeListener.onStateChange(fill);
-        }
 
     }
+
+
 
     public void setStrokeColor(int color){
         strokeColor = color;
@@ -158,27 +155,10 @@ public class Stamp extends View implements View.OnClickListener, StampHelper {
         height = ConversionUtil.convertDpToPixel(newHeight, getContext());
         invalidate();
     }
-
     public boolean getState(){
         return fill;
     }
 
-    public void setOnStateChangeListener(StampStateChangeListener listener){
-        stateChangeListener = listener;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        fill = !fill;
-        if(stateChangeListener != null){
-            stateChangeListener.onStateChange(fill);
-        }
-
-
-        invalidate();
-
-    }
 
     @Nullable
     @Override
